@@ -36,10 +36,6 @@ aws cloudformation deploy \
   --stack-name s3-bucket-size-aggregator \
   --capabilities CAPABILITY_NAMED_IAM
 
-Terraform
-
-You can also deploy using Terraform (see main.tf example below).
-
 Usage
 Manual Trigger
 {
@@ -73,49 +69,32 @@ Fully environment/configuration-driven; no code changes needed for new AWS accou
 Useful for cost estimation and understanding storage usage.
 
 
----
+Alternative Terraform IaC Usage (same functionality as CloudFormation AWS stack)
 
-## **Terraform Equivalent (`main.tf`)**
+Set variables:
 
-```hcl
-provider "aws" {
-  region = "us-east-1"  # change as needed
-}
+export TF_VAR_config_s3_bucket="your-config-bucket-name"
 
-resource "aws_iam_role" "s3_size_aggregator_role" {
-  name = "s3-bucket-size-aggregator-role"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
-      Principal = {
-        Service = "lambda.amazonaws.com"
-      }
-    }]
-  })
-}
 
-resource "aws_iam_role_policy_attachment" "lambda_s3_readonly" {
-  role       = aws_iam_role.s3_size_aggregator_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
-}
+Zip Lambda code:
 
-resource "aws_iam_role_policy_attachment" "lambda_cloudwatch" {
-  role       = aws_iam_role.s3_size_aggregator_role.name
-  policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
-}
+zip lambda_function.zip lambda_function.py
 
-resource "aws_lambda_function" "s3_size_aggregator" {
-  function_name = "s3-bucket-size-aggregator"
-  runtime       = "python3.11"
-  role          = aws_iam_role.s3_size_aggregator_role.arn
-  handler       = "lambda_function.lambda_handler"
-  filename      = "lambda_function.zip" # Zip your code
-  source_code_hash = filebase64sha256("lambda_function.zip")
-  timeout       = 900
-  memory_size   = 1024
-}
+
+Deploy:
+
+terraform init
+terraform apply
+
+Lambda Behavior
+
+Automatically reads CONFIG_S3_BUCKET from environment variables.
+
+Falls back to defaults if the S3 config file is not present.
+
+Fully matches CloudFormation deployment behavior.
+
+Threading, bucket filtering, and optional S3 report are all identical.
 
 Notes:
 
