@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  S3 Bucket Size Statistical Aggregator Lambda
+  Fully config-driven; can run with or without config.json.
+
+Resources:
+
+  S3SizeAggregatorRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: s3-bucket-size-aggregator-role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+        - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
+
+  S3SizeAggregatorLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: s3-bucket-size-aggregator
+      Runtime: python3.11
+      Handler: lambda_function.lambda_handler
+      Role: !GetAtt S3SizeAggregatorRole.Arn
+      MemorySize: 1024
+      Timeout: 900
+      Code:
+        S3Bucket: INSERT_LAMBDA_CODE_BUCKET_HERE
+        S3Key: lambda_function.zip
+      Environment:
+        Variables:
+          CONFIG_S3_BUCKET: INSERT_CONFIG_BUCKET_HERE  # Optional
