@@ -111,12 +111,12 @@ echo "Total size of all S3 buckets combined: $total_size_in_bytes bytes"
 echo "Total size of all S3 buckets combined: $total_size_in_gib GiB"
 
 
-Output Example:
+### Output Example:
 
 Total size of all S3 buckets combined: 957432773261 bytes
 Total size of all S3 buckets combined: 891.67 GiB
 
-Lambda Function
+### Lambda Function
 
 Example lambda_function.py:
 
@@ -144,7 +144,6 @@ def lambda_handler(event, context):
     buckets = [bucket['Name'] for bucket in buckets_response.get('Buckets', [])]
     total_size_bytes = 0
     bucket_details = []
-
     with ThreadPoolExecutor(max_workers=10) as executor:
         future_to_bucket = {executor.submit(get_bucket_size, bucket): bucket for bucket in buckets}
         for future in as_completed(future_to_bucket):
