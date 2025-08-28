@@ -19,7 +19,7 @@ It can run:
 ## Configuration
 
 ### Built-in Defaults (Replace `INSERT_*` values before deployment)
-
+```json
 DEFAULT_CONFIG = {
     "MAX_THREADS": 10,
     "BUCKET_FILTER_PREFIX": "",
@@ -33,7 +33,7 @@ Optional S3 Config (config.json)
     "BUCKET_FILTER_PREFIX": "",
     "REPORT_OUTPUT_S3_BUCKET": "arn:aws:s3:::your-report-bucket"
 }
-
+```
 
 Place config.json in a bucket and set the Lambda environment variable CONFIG_S3_BUCKET.
 
