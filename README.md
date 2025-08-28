@@ -73,7 +73,7 @@ variable "report_bucket" {
 ### Running via AWS CloudShell (Bash Script)
 
 You can run a quick total S3 bucket size scan without Lambda:
-
+```bash
 #!/bin/bash
 echo "Listing all S3 buckets..."
 buckets=$(aws s3 ls | awk '{print $3}')
@@ -109,7 +109,7 @@ total_size_in_gib=$(echo "scale=2; $total_size_in_bytes / 1073741824" | bc)
 echo "---------------------------------------------------"
 echo "Total size of all S3 buckets combined: $total_size_in_bytes bytes"
 echo "Total size of all S3 buckets combined: $total_size_in_gib GiB"
-
+```
 
 ### Output Example:
 
