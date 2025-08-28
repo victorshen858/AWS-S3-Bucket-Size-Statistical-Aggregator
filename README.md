@@ -117,7 +117,7 @@ Total size of all S3 buckets combined: 957432773261 bytes
 Total size of all S3 buckets combined: 891.67 GiB
 
 ### Lambda Function
-
+```python
 Example lambda_function.py:
 
 import boto3
@@ -170,10 +170,10 @@ def lambda_handler(event, context):
         "statusCode": 200,
         "body": result
     }
-
+```
 ### Notes
 
--Supports manual run for testing or automated runs via Lambda triggers.
--Configurable with config.json or constants in Lambda.
--Placeholders (INSERT_*) follow AWS ARN format for clarity.
--Both CloudFormation and Terraform deployments supported.
+-Supports manual run for testing or automated runs via Lambda triggers. \
+-Configurable with config.json or constants in Lambda.\
+-Placeholders (INSERT_*) follow AWS ARN format for clarity. \
+-Both CloudFormation and Terraform deployments supported. \
